@@ -7,7 +7,7 @@ FROM arilot/docker-bitcoind
 
 RUN apt-get update
 
-RUN apt-get install -y python3-pip
+RUN apt-get install -y python3-pip wget expect vim
 
 #RUN pwd
 RUN ls -al /tmp
@@ -34,7 +34,36 @@ RUN ls -al /tmp
 #
 COPY docker/start-bitcoind.sh /usr/local/bin/
 
-ENTRYPOINT ["start-bitcoind.sh"]
+
+#dcrdex
+
+#ADD docker/install-dcr-expect.sh .
+#RUN chmod u+x ./install-dcr.sh
+
+#RUN wget https://github.com/decred/decred-release/releases/download/v1.5.1/dcrinstall-linux-amd64-v1.5.1 && \
+#    chmod u+x ./dcrinstall-linux-amd64-v1.5.1 && \
+#./dcrinstall-linux-amd64-v1.5.1 \n\
+#expect "Enter the private passphrase for your new wallet:" { send "dexpass" }
+
+#RUN wait 50000
+
+#ENTRYPOINT ["start-bitcoind.sh"]
+#ADD docker/wait.sh /usr/local/bin/
+#ADD docker/install-dcr-expect.sh /usr/local/bin/
+
+#RUN mkdir -p /installs
+
+ADD docker/wait.sh .
+ADD docker/install-dcr-expect.sh .
+ADD docker/dcrdex-template.conf .
+ADD docker/install-dcr.sh .
+ADD docker/start-wallet-expect.sh .
+ADD docker/start-dcr.sh .
+ADD docker/start-all.sh .
+#ENTRYPOINT ["wait.sh"]
+#ENTRYPOINT ["./install-dcr-expect.sh"]
+#ENTRYPOINT ["./install-dcr.sh"]
+ENTRYPOINT ["./start-all.sh"]
 
 #
 #RUN chmod +x start-bitcoind.sh
