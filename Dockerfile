@@ -51,19 +51,20 @@ COPY docker/start-bitcoind.sh /usr/local/bin/
 #ADD docker/wait.sh /usr/local/bin/
 #ADD docker/install-dcr-expect.sh /usr/local/bin/
 
-#RUN mkdir -p /installs
+RUN mkdir -p /installs/decred
+RUN mkdir -p /decred
 
-ADD docker/wait.sh .
-ADD docker/install-dcr-expect.sh .
-ADD docker/dcrdex-template.conf .
-ADD docker/install-dcr.sh .
-ADD docker/start-wallet-expect.sh .
-ADD docker/start-dcr.sh .
-ADD docker/start-all.sh .
+ADD docker/wait.sh /installs/decred/
+ADD docker/install-dcr-expect.sh /installs/decred/
+ADD docker/dcrdex-template.conf /installs/decred/
+ADD docker/install-dcr.sh /installs/decred/
+ADD docker/start-wallet-expect.sh /installs/decred/
+ADD docker/start-dcr.sh /installs/decred/
+ADD docker/start-all.sh /installs/decred/
 #ENTRYPOINT ["wait.sh"]
 #ENTRYPOINT ["./install-dcr-expect.sh"]
 #ENTRYPOINT ["./install-dcr.sh"]
-ENTRYPOINT ["./start-all.sh"]
+ENTRYPOINT ["/installs/decred/start-all.sh"]
 
 #
 #RUN chmod +x start-bitcoind.sh

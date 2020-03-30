@@ -43,7 +43,7 @@ if {$force_conservative} {
 
 
 set timeout -1
-spawn ./decred/dcrwallet
+spawn /decred/dcrwallet
 match_max 100000
 expect "*\r
 Enter private passphrase: "

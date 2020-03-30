@@ -1,15 +1,21 @@
 #!/bin/bash
 
-./install-dcr.sh
-./decred/dcrd > /dev/null 2>&1 &
+/installs/decred/install-dcr.sh
+/decred/dcrd > /dev/null 2>&1 &
 #./decred/dcrwallet &
-./start-wallet-expect.sh > /dev/null 2>&1 &
-mkdir -p ./.dcrdex
-regfeexpub="$(./decred/dcrctl --wallet getmasterpubkey)"
+/installs/decred/start-wallet-expect.sh > /dev/null 2>&1 &
+mkdir -p ~/.dcrdex
 
-cat ./dcrdex-template.conf | \
+while [ ! -f /root/.dcrwallet/rpc.cert ]
+do
+  sleep 2 # or less like 0.2
+done
+
+regfeexpub="$(/decred/dcrctl --wallet getmasterpubkey)"
+
+cat /installs/decred/dcrdex-template.conf | \
 sed "s/\X_REGFREEXPUB_X/${regfeexpub}/" \
-> ./.dcrdex/dcrdex.conf
+> ~/.dcrdex/dcrdex.conf
 
-./wait.sh
+/installs/decred/wait.sh
 

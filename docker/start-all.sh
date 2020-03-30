@@ -1,6 +1,9 @@
 #!/bin/bash
 
-start-bitcoind.sh &
-./start-dcr.sh
+#start-bitcoind.sh &
+
+cd /
+
+/installs/decred/start-dcr.sh
 
 

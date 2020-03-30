@@ -43,7 +43,7 @@ if {$force_conservative} {
 
 
 set timeout -1
-spawn ./dcrinstall-linux-amd64-v1.5.1
+spawn /dcrinstall-linux-amd64-v1.5.1 -dest /decred
 match_max 100000
 expect "*\r
 Enter the private passphrase for your new wallet: "
