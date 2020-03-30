@@ -61,6 +61,12 @@ ADD docker/install-dcr.sh /installs/decred/
 ADD docker/start-wallet-expect.sh /installs/decred/
 ADD docker/start-dcr.sh /installs/decred/
 ADD docker/start-all.sh /installs/decred/
+
+RUN mkdir -p /installs/go
+ADD docker/install-go.sh /installs/go/
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+
 #ENTRYPOINT ["wait.sh"]
 #ENTRYPOINT ["./install-dcr-expect.sh"]
 #ENTRYPOINT ["./install-dcr.sh"]

@@ -4,7 +4,7 @@
 /decred/dcrd > /dev/null 2>&1 &
 #./decred/dcrwallet &
 /installs/decred/start-wallet-expect.sh > /dev/null 2>&1 &
-mkdir -p ~/.dcrdex
+mkdir -p /root/.dcrdex
 
 while [ ! -f /root/.dcrwallet/rpc.cert ]
 do
@@ -15,7 +15,7 @@ regfeexpub="$(/decred/dcrctl --wallet getmasterpubkey)"
 
 cat /installs/decred/dcrdex-template.conf | \
 sed "s/\X_REGFREEXPUB_X/${regfeexpub}/" \
-> ~/.dcrdex/dcrdex.conf
+> /root/.dcrdex/dcrdex.conf
 
-/installs/decred/wait.sh
+
 
