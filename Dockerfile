@@ -7,7 +7,7 @@ FROM arilot/docker-bitcoind
 
 RUN apt-get update
 
-RUN apt-get install -y python3-pip wget expect vim sudo
+RUN apt-get install -y python3-pip wget expect vim sudo git
 
 #RUN pwd
 RUN ls -al /tmp
@@ -70,6 +70,8 @@ RUN mkdir -p /installs/postgresql
 ADD docker/install-postgresql.sh /installs/postgresql/
 ADD docker/init-postgresql-createuser.sh /installs/postgresql/
 #ADD docker/init-postgresql-createdb.sh /installs/postgresql/
+
+ADD docker/markets.json /root/.dcrdex/
 
 #ENTRYPOINT ["wait.sh"]
 #ENTRYPOINT ["./install-dcr-expect.sh"]
