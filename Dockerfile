@@ -7,7 +7,7 @@ FROM arilot/docker-bitcoind
 
 RUN apt-get update
 
-RUN apt-get install -y python3-pip wget expect vim
+RUN apt-get install -y python3-pip wget expect vim sudo
 
 #RUN pwd
 RUN ls -al /tmp
@@ -66,6 +66,10 @@ RUN mkdir -p /installs/go
 ADD docker/install-go.sh /installs/go/
 ENV PATH="/usr/local/go/bin:${PATH}"
 
+RUN mkdir -p /installs/postgresql
+ADD docker/install-postgresql.sh /installs/postgresql/
+ADD docker/init-postgresql-createuser.sh /installs/postgresql/
+#ADD docker/init-postgresql-createdb.sh /installs/postgresql/
 
 #ENTRYPOINT ["wait.sh"]
 #ENTRYPOINT ["./install-dcr-expect.sh"]
