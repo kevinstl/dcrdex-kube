@@ -41,9 +41,13 @@ if {$force_conservative} {
 #
 # -Don
 
+#rpcuser=$1
+#rpcpass=$2
+
 
 set timeout -1
-spawn /decred/dcrwallet
+#spawn /decred/dcrwallet -u ${rpcuser} -P ${rpcpass}
+spawn /decred/dcrwallet --simnet
 match_max 100000
 expect "*\r
 Enter private passphrase: "

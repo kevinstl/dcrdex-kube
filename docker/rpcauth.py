@@ -40,6 +40,8 @@ def main():
 
     print('String to be appended to bitcoin.conf:')
     print('rpcauth={0}:{1}${2}'.format(args.username, salt, password_hmac))
+    print('rpcuser={0}'.format(args.username))
+    print('rpcpassword={0}'.format(args.password))
     print('Your password:\n{0}'.format(args.password))
 
 if __name__ == '__main__':

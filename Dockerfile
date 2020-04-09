@@ -7,7 +7,7 @@ FROM arilot/docker-bitcoind
 
 RUN apt-get update
 
-RUN apt-get install -y python3-pip wget expect vim sudo git
+RUN apt-get install -y python3-pip wget expect vim sudo git net-tools lsof nodejs npm curl
 
 #RUN pwd
 RUN ls -al /tmp
@@ -32,7 +32,10 @@ RUN ls -al /tmp
 
 #WORKDIR /opt/
 #
+
 COPY docker/start-bitcoind.sh /usr/local/bin/
+RUN mkdir -p /bitcoin/.bitcoin/
+ADD docker/bitcoin.conf /bitcoin/.bitcoin/
 
 
 #dcrdex
@@ -58,6 +61,7 @@ ADD docker/wait.sh /installs/decred/
 ADD docker/install-dcr-expect.sh /installs/decred/
 ADD docker/dcrdex-template.conf /installs/decred/
 ADD docker/install-dcr.sh /installs/decred/
+ADD docker/create-wallet-expect.sh /installs/decred/
 ADD docker/start-wallet-expect.sh /installs/decred/
 ADD docker/start-dcr.sh /installs/decred/
 ADD docker/start-all.sh /installs/decred/
@@ -71,7 +75,21 @@ ADD docker/install-postgresql.sh /installs/postgresql/
 ADD docker/init-postgresql-createuser.sh /installs/postgresql/
 #ADD docker/init-postgresql-createdb.sh /installs/postgresql/
 
+RUN mkdir -p /installs/nodejs
+ADD docker/install-nodejs.sh /installs/nodejs/
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+#RUN mkdir -p /installs/dcrdex/
 ADD docker/markets.json /root/.dcrdex/
+ADD docker/install-dcrdex.sh /installs/decred/
+
+ADD docker/install-nodejs.sh /installs/decred/
+ADD docker/install-dcrdex-web-client.sh /installs/decred/
+ADD docker/install-dcrdex-client.sh /installs/decred/
+
+
+ADD docker/start-dcrdex.sh /installs/decred/
+ADD docker/start-dex-client.sh /installs/decred/
 
 #ENTRYPOINT ["wait.sh"]
 #ENTRYPOINT ["./install-dcr-expect.sh"]

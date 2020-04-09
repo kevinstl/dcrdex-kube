@@ -1,8 +1,8 @@
 {
   "markets": [
     {
-      "base": "DCR_testnet",
-      "quote": "BTC_testnet",
+      "base": "DCR_simnet",
+      "quote": "BTC_simnet",
       "epochDuration": 10000,
       "marketBuyBuffer": 1.25
     }
@@ -28,6 +28,16 @@
       "fundConf": 1,
       "configPath": "/root/.dcrd/dcrd.conf"
     },
+    "DCR_simnet": {
+      "bip44symbol": "dcr",
+      "network": "simnet",
+      "lotSize": 100000000,
+      "rateStep": 100000000,
+      "feeRate": 10,
+      "swapConf": 1,
+      "fundConf": 1,
+      "configPath": "/root/.dcrd/dcrd.conf"
+    },
     "BTC_mainnet": {
       "bip44symbol": "btc",
       "network": "mainnet",
@@ -35,7 +45,8 @@
       "rateStep": 100000,
       "feeRate": 100,
       "swapConf": 3,
-      "fundConf": 3
+      "fundConf": 3,
+      "configPath": "/bitcoin/.bitcoin/bitcoin.conf"
     },
     "BTC_testnet": {
       "bip44symbol": "btc",
@@ -44,7 +55,18 @@
       "rateStep": 100000,
       "feeRate": 100,
       "swapConf": 1,
-      "fundConf": 1
+      "fundConf": 1,
+      "configPath": "/bitcoin/.bitcoin/bitcoin.conf"
+    },
+    "BTC_simnet": {
+      "bip44symbol": "btc",
+      "network": "regtest",
+      "lotSize": 100000,
+      "rateStep": 100000,
+      "feeRate": 100,
+      "swapConf": 1,
+      "fundConf": 1,
+      "configPath": "/bitcoin/.bitcoin/bitcoin.conf"
     },
     "LTC_mainnet": {
       "bip44symbol": "ltc",
