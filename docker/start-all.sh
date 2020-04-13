@@ -13,10 +13,11 @@ cd /
 /installs/decred/install-dcr.sh && \
 /installs/decred/install-dcrdex.sh && \
 /installs/decred/start-dcr.sh && \
+/installs/decred/init-for-dcrdex.sh && \
 /installs/decred/start-dcrdex.sh && \
 /installs/decred/start-dex-client.sh
 
 
-#/installs/decred/wait.sh
+/installs/decred/wait.sh
 
 

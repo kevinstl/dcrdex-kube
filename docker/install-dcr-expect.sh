@@ -45,6 +45,8 @@ if {$force_conservative} {
 
 
 set timeout -1
+#spawn /dcrinstall-linux-amd64-v1.5.1 -dest /decred -net simnet
+#spawn /dcrinstall-linux-amd64-v1.5.1 -dest / -net simnet
 spawn /dcrinstall-linux-amd64-v1.5.1 -dest /decred
 match_max 100000
 expect "*\r

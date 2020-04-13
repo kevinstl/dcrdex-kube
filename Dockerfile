@@ -39,33 +39,6 @@ ADD docker/bitcoin.conf /bitcoin/.bitcoin/
 
 
 #dcrdex
-
-#ADD docker/install-dcr-expect.sh .
-#RUN chmod u+x ./install-dcr.sh
-
-#RUN wget https://github.com/decred/decred-release/releases/download/v1.5.1/dcrinstall-linux-amd64-v1.5.1 && \
-#    chmod u+x ./dcrinstall-linux-amd64-v1.5.1 && \
-#./dcrinstall-linux-amd64-v1.5.1 \n\
-#expect "Enter the private passphrase for your new wallet:" { send "dexpass" }
-
-#RUN wait 50000
-
-#ENTRYPOINT ["start-bitcoind.sh"]
-#ADD docker/wait.sh /usr/local/bin/
-#ADD docker/install-dcr-expect.sh /usr/local/bin/
-
-RUN mkdir -p /installs/decred
-RUN mkdir -p /decred
-
-ADD docker/wait.sh /installs/decred/
-ADD docker/install-dcr-expect.sh /installs/decred/
-ADD docker/dcrdex-template.conf /installs/decred/
-ADD docker/install-dcr.sh /installs/decred/
-ADD docker/create-wallet-expect.sh /installs/decred/
-ADD docker/start-wallet-expect.sh /installs/decred/
-ADD docker/start-dcr.sh /installs/decred/
-ADD docker/start-all.sh /installs/decred/
-
 RUN mkdir -p /installs/go
 ADD docker/install-go.sh /installs/go/
 ENV PATH="/usr/local/go/bin:${PATH}"
@@ -79,17 +52,31 @@ RUN mkdir -p /installs/nodejs
 ADD docker/install-nodejs.sh /installs/nodejs/
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-#RUN mkdir -p /installs/dcrdex/
-ADD docker/markets.json /root/.dcrdex/
-ADD docker/install-dcrdex.sh /installs/decred/
 
+
+RUN mkdir -p /installs/decred
+RUN mkdir -p /decred
+
+ADD docker/markets.json /root/.dcrdex/
+ADD docker/dcrdex-template.conf /installs/decred/
+
+ADD docker/create-wallet-expect.sh /installs/decred/
+ADD docker/init-for-dcrdex.sh /installs/decred/
+
+ADD docker/install-dcrdex.sh /installs/decred/
 ADD docker/install-nodejs.sh /installs/decred/
 ADD docker/install-dcrdex-web-client.sh /installs/decred/
 ADD docker/install-dcrdex-client.sh /installs/decred/
+ADD docker/install-dcr-expect.sh /installs/decred/
+ADD docker/install-dcr.sh /installs/decred/
 
-
+ADD docker/start-wallet-expect.sh /installs/decred/
+ADD docker/start-dcr.sh /installs/decred/
+ADD docker/start-all.sh /installs/decred/
 ADD docker/start-dcrdex.sh /installs/decred/
 ADD docker/start-dex-client.sh /installs/decred/
+
+ADD docker/wait.sh /installs/decred/
 
 #ENTRYPOINT ["wait.sh"]
 #ENTRYPOINT ["./install-dcr-expect.sh"]

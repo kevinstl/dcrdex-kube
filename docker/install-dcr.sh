@@ -8,6 +8,9 @@ chmod u+x /dcrinstall-linux-amd64-v1.5.1
 echo "install-dcr-expect.sh"
 /installs/decred/install-dcr-expect.sh
 
+#cp /decred-linux-amd64-v1.5.1/dcr* /decred-linux-amd64-v1.5.1/p* /decred
+
+
 #PS> git clone https://github.com/decred/dcrd $env:USERPROFILE\src\dcrd
 #PS> cd $env:USERPROFILE\src\dcrd
 #PS> go install . .\cmd\...
