@@ -6,11 +6,12 @@ cd /installs/dcrdex/client/cmd/dexc
 
 go build
 
-#mkdir -p /root/.dexc
-#echo "{
-#	"http://127.0.0.1:7232": "/root/.dcrdex/rpc.cert"
-#	"https://127.0.0.1:7232": "/root/.dcrdex/rpc.cert"
-#}" >> /root/.dexc/certs.json
+mkdir -p /root/.dexc
+echo "{
+	\"http://127.0.0.1:7232\": \"/root/.dexc/rpc.cert\",
+	\"https://127.0.0.1:7232\": \"/root/.dexc/rpc.cert\",
+	\"https://dex-test.ssgen.io:7232\": \"/root/.dexc/rpc.cert\"
+}" >> /root/.dexc/certs.json
 
 #lsof -i -P -n | grep LISTEN
 #./dexc --simnet
