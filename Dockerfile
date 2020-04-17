@@ -9,6 +9,10 @@ RUN apt-get update
 
 RUN apt-get install -y python3-pip wget expect vim sudo git net-tools lsof nodejs npm curl
 
+RUN apt-get update
+
+RUN apt-get install -y tmux
+
 #RUN pwd
 RUN ls -al /tmp
 
@@ -75,6 +79,9 @@ ADD docker/start-dcr.sh /installs/decred/
 ADD docker/start-all.sh /installs/decred/
 ADD docker/start-dcrdex.sh /installs/decred/
 ADD docker/start-dex-client.sh /installs/decred/
+
+ADD docker/init-btc-assets.sh /installs/decred/
+ADD docker/init-dcr-assets.sh /installs/decred/
 
 ADD docker/wait.sh /installs/decred/
 

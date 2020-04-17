@@ -58,3 +58,4 @@ echo "debug6"
 echo "debug7"
 
 ./dcrctl --simnet --wallet getbalance
+

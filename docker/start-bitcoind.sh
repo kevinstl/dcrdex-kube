@@ -30,5 +30,18 @@ fi
 #echo "[test]" >> /bitcoin/.bitcoin/bitcoin.conf
 #echo "rpcport=19832" >> /bitcoin/.bitcoin/bitcoin.conf
 
-docker-entrypoint.sh btc_oneshot
+#docker-entrypoint.sh btc_oneshot &
+
+bitcoind &
+
+while [ ! -f /bitcoin/.bitcoin/regtest/wallets/wallet.dat ]
+do
+  sleep 2
+done
+
+lsof -i -P -n | grep LISTEN
+
+/usr/bin/bitcoin-cli --conf=/bitcoin/.bitcoin/bitcoin.conf generate 151
+
+/usr/bin/bitcoin-cli --conf=/bitcoin/.bitcoin/bitcoin.conf getbalance
 
