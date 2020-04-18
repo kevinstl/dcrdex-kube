@@ -1,3 +1,4 @@
+#FROM lukechilds/bitcoind
 FROM arilot/docker-bitcoind
 
 

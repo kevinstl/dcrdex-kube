@@ -16,7 +16,9 @@ pg_ctlcluster 11 main start
 #sudo -u postgres createuser -P dcrdex
 #sudo -u postgres createdb -O dcrdex dcrdex_testnet
 
+echo "init-postgresql-createuser.sh"
 /installs/postgresql/init-postgresql-createuser.sh
-#/installs/postgresql/init-postgresql-createdb.sh
+echo "init-postgresql-createdb.sh"
+/installs/postgresql/init-postgresql-createdb.sh
 
 sudo -u postgres createdb -O dcrdex dcrdex_testnet

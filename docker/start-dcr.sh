@@ -35,10 +35,8 @@ do
   sleep 2
 done
 
-#cp /root/.dcrwallet/rpc.cert /root/.dcrdex/rpc.cert
-
 echo "get regfeexpub"
-regfeexpub="$(/decred/dcrctl --wallet getmasterpubkey)"
+regfeexpub="$(/decred/dcrctl --simnet --wallet getmasterpubkey)"
 
 echo "regfeexpub: ${regfeexpub}"
 

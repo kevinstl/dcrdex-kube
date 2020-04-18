@@ -2,6 +2,7 @@
 
 echo "install-dcrdex.sh"
 
+
 #git clone https://github.com/decred/dcrdex.git /installs/dcrdex
 #git clone --branch issue-236-notui https://github.com/kevinstl/dcrdex.git /installs/dcrdex
 git clone --branch localhost-to-all-local https://github.com/kevinstl/dcrdex.git /installs/dcrdex
