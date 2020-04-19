@@ -1,10 +1,10 @@
-#FROM lukechilds/bitcoind
-FROM arilot/docker-bitcoind
+FROM lukechilds/bitcoind
+#FROM arilot/docker-bitcoind
 
 
-#RUN mkdir -p /bitcoin/.bitcoin/shared
+#RUN mkdir -p /data/.bitcoin/shared
 
-#WORKDIR /bitcoin/.bitcoind/shared
+#WORKDIR /data/.bitcoind/shared
 
 RUN apt-get update
 
@@ -12,7 +12,7 @@ RUN apt-get install -y python3-pip wget expect vim sudo git net-tools lsof nodej
 
 RUN apt-get update
 
-RUN apt-get install -y tmux
+RUN apt-get install -y tmux procps
 
 #RUN pwd
 RUN ls -al /tmp
@@ -39,8 +39,9 @@ RUN ls -al /tmp
 #
 
 COPY docker/start-bitcoind.sh /usr/local/bin/
-RUN mkdir -p /bitcoin/.bitcoin/
-ADD docker/bitcoin.conf /bitcoin/.bitcoin/
+RUN mkdir -p /data/.bitcoin/
+ADD docker/bitcoin.conf /data/.bitcoin/
+ADD docker/bitcoin-for-dcr.conf /data/.bitcoin/
 
 
 #dcrdex

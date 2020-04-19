@@ -46,7 +46,7 @@
       "feeRate": 100,
       "swapConf": 3,
       "fundConf": 3,
-      "configPath": "/bitcoin/.bitcoin/bitcoin.conf"
+      "configPath": "/data/.bitcoin/bitcoin-for-dcr.conf"
     },
     "BTC_testnet": {
       "bip44symbol": "btc",
@@ -56,7 +56,7 @@
       "feeRate": 100,
       "swapConf": 1,
       "fundConf": 1,
-      "configPath": "/bitcoin/.bitcoin/bitcoin.conf"
+      "configPath": "/data/.bitcoin/bitcoin-for-dcr.conf"
     },
     "BTC_simnet": {
       "bip44symbol": "btc",
@@ -66,7 +66,7 @@
       "feeRate": 100,
       "swapConf": 1,
       "fundConf": 1,
-      "configPath": "/bitcoin/.bitcoin/bitcoin.conf"
+      "configPath": "/data/.bitcoin/bitcoin-for-dcr.conf"
     },
     "LTC_mainnet": {
       "bip44symbol": "ltc",
