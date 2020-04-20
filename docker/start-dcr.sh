@@ -2,7 +2,7 @@
 
 echo "start-dcr.sh"
 
-/decred/dcrd --simnet &
+/decred/dcrd --simnet --txindex &
 
 sed -i "s/\[Ticket Buyer Options\]/;\[Ticket Buyer Options\]/" /root/.dcrwallet/dcrwallet.conf
 

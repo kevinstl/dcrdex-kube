@@ -19,7 +19,13 @@ pg_ctlcluster 11 main start
 
 echo "init-postgresql-createuser.sh"
 /installs/postgresql/init-postgresql-createuser.sh
-echo "init-postgresql-createdb.sh"
-/installs/postgresql/init-postgresql-createdb.sh
 
-sudo -u postgres createdb -O dcrdex dcrdex_testnet
+#echo "init-postgresql-createdb.sh"
+#/installs/postgresql/init-postgresql-createdb.sh
+
+#sudo -u postgres createdb -O dcrdex dcrdex_testnet
+
+sudo -u postgres createdb -O dcrdex dcrdex_simnet
+
+sudo -u postgres -H psql -d dcrdex_simnet -c 'update accounts set broken_rule = 0;'
+

@@ -37,7 +37,7 @@ done
 
 echo "debug4"
 
-/decred/dcrd --simnet --miningaddr=${miningaddr} &
+/decred/dcrd --simnet --txindex --miningaddr=${miningaddr} &
 
 echo "debug5"
 

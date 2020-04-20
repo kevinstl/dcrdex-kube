@@ -10,6 +10,10 @@ chmod u+x /dcrinstall-linux-amd64-v1.5.1
 echo "install-dcr-expect.sh"
 /installs/decred/install-dcr-expect.sh
 
+ln -s /decred/dcrd /usr/local/bin/
+ln -s /decred/dcrwallet /usr/local/bin/
+ln -s /decred/dcrctl /usr/local/bin/
+
 #cp /decred-linux-amd64-v1.5.1/dcr* /decred-linux-amd64-v1.5.1/p* /decred
 
 

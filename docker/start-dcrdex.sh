@@ -15,4 +15,7 @@ cd /installs/dcrdex/server/cmd/dcrdex
 
 #./dcrdex -d trace --simnet --marketsconfpath=/root/.dcrdex/markets.json --regfeeconfirms 3 &
 
-./dcrdex -d trace --configfile=/root/.dcrdex/dcrdex.conf --simnet --marketsconfpath=/root/.dcrdex/markets.json --regfeeconfirms 3 &
+#./dcrdex -d trace --configfile=/root/.dcrdex/dcrdex.conf --simnet --marketsconfpath=/root/.dcrdex/markets.json --regfeeconfirms 3 &
+#./dcrdex -d trace --configfile=/root/.dcrdex/dcrdex.conf --simnet --marketsconfpath=/root/.dcrdex/markets.json --regfeeconfirms 3 --anarchy &
+
+/installs/decred/start-dcrdex-expect.sh &

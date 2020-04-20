@@ -80,6 +80,7 @@ ADD docker/start-wallet-expect.sh /installs/decred/
 ADD docker/start-dcr.sh /installs/decred/
 ADD docker/start-all.sh /installs/decred/
 ADD docker/start-dcrdex.sh /installs/decred/
+ADD docker/start-dcrdex-expect.sh /installs/decred/
 ADD docker/start-dex-client.sh /installs/decred/
 
 ADD docker/init-btc-assets.sh /installs/decred/
