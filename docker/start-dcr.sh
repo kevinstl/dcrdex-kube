@@ -4,7 +4,7 @@ echo "start-dcr.sh"
 
 /decred/dcrd --simnet --txindex &
 
-sed -i "s/\[Ticket Buyer Options\]/;\[Ticket Buyer Options\]/" /root/.dcrwallet/dcrwallet.conf
+#sed -i "s/\[Ticket Buyer Options\]/;\[Ticket Buyer Options\]/" /root/.dcrwallet/dcrwallet.conf
 
 echo "create-wallet-expect.sh"
 #/installs/decred/create-wallet-expect.sh > /dev/null 2>&1 &
@@ -28,21 +28,21 @@ done
 #/installs/decred/init-for-dcrdex.sh
 
 
-mkdir -p /root/.dcrdex
-
-while [ ! -f /root/.dcrwallet/rpc.cert ]
-do
-  sleep 2
-done
-
-echo "get regfeexpub"
-regfeexpub="$(/decred/dcrctl --simnet --wallet getmasterpubkey)"
-
-echo "regfeexpub: ${regfeexpub}"
-
-cat /installs/decred/dcrdex-template.conf | \
-sed "s/\X_REGFREEXPUB_X/${regfeexpub}/" \
-> /root/.dcrdex/dcrdex.conf
+#mkdir -p /root/.dcrdex
+#
+#while [ ! -f /root/.dcrwallet/rpc.cert ]
+#do
+#  sleep 2
+#done
+#
+#echo "get regfeexpub"
+#regfeexpub="$(/decred/dcrctl --simnet --wallet getmasterpubkey)"
+#
+#echo "regfeexpub: ${regfeexpub}"
+#
+#cat /installs/decred/dcrdex-template.conf | \
+#sed "s/\X_REGFREEXPUB_X/${regfeexpub}/" \
+#> /root/.dcrdex/dcrdex.conf
 
 
 

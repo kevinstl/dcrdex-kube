@@ -68,6 +68,7 @@ ADD docker/dcrdex-template.conf /installs/decred/
 
 ADD docker/create-wallet-expect.sh /installs/decred/
 ADD docker/init-for-dcrdex.sh /installs/decred/
+ADD docker/init-dcrdex-conf.sh /installs/decred/
 
 ADD docker/install-dcrdex.sh /installs/decred/
 ADD docker/install-nodejs.sh /installs/decred/

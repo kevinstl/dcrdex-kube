@@ -27,5 +27,5 @@ echo "init-postgresql-createuser.sh"
 
 sudo -u postgres createdb -O dcrdex dcrdex_simnet
 
-sudo -u postgres -H psql -d dcrdex_simnet -c 'update accounts set broken_rule = 0;'
+#sudo -u postgres -H psql -d dcrdex_simnet -c 'update accounts set broken_rule = 0;'
 

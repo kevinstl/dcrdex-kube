@@ -10,6 +10,8 @@ chmod u+x /dcrinstall-linux-amd64-v1.5.1
 echo "install-dcr-expect.sh"
 /installs/decred/install-dcr-expect.sh
 
+sed -i "s/\[Ticket Buyer Options\]/;\[Ticket Buyer Options\]/" /root/.dcrwallet/dcrwallet.conf
+
 ln -s /decred/dcrd /usr/local/bin/
 ln -s /decred/dcrwallet /usr/local/bin/
 ln -s /decred/dcrctl /usr/local/bin/
