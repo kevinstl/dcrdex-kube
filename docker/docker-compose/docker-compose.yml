@@ -1,0 +1,8 @@
+version: '3'
+services:
+  dcrdex-postgresql:
+    image: postgres:12.2
+    environment:
+      POSTGRES_USER: dcrdex
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: dcrdex_simnet
