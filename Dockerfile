@@ -72,7 +72,7 @@ ADD docker/init-dcrdex-conf.sh /installs/decred/
 
 ADD docker/install-dcrdex.sh /installs/decred/
 ADD docker/install-nodejs.sh /installs/decred/
-ADD docker/install-dcrdex-web-client.sh /installs/decred/
+ADD docker/install-dcrdex-web-server.sh /installs/decred/
 ADD docker/install-dcrdex-client.sh /installs/decred/
 ADD docker/install-dcr-expect.sh /installs/decred/
 ADD docker/install-dcr.sh /installs/decred/

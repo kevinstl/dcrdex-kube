@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "install-dcrdex-web-client.sh"
+echo "install-dcrdex-web-server.sh"
 
 /installs/decred/install-nodejs.sh
 

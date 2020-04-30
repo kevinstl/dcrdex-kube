@@ -9,7 +9,7 @@ echo "install-dcrdex.sh"
 git clone --branch simnet-auto-mine https://github.com/kevinstl/dcrdex.git /installs/dcrdex
 
 /installs/decred/install-dcrdex-client.sh
-/installs/decred/install-dcrdex-web-client.sh
+/installs/decred/install-dcrdex-web-server.sh
 
 cd /installs/dcrdex/server/cmd/genkey
 
