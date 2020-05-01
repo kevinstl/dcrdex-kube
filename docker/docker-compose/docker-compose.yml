@@ -1,8 +1,14 @@
 version: '3'
 services:
+  dcrdex-kube:
+    image: dcrdex-kube
+    ports:
+      - 5758:5758
   dcrdex-postgresql:
     image: postgres:12.2
     environment:
       POSTGRES_USER: dcrdex
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
       POSTGRES_DB: dcrdex_simnet
+#    ports:
+#      - 5432:5432

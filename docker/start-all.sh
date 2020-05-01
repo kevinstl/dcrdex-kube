@@ -21,7 +21,7 @@ echo "start-all.sh"
 #using test harness
 /installs/go/install-go.sh
 
-/installs/postgresql/install-postgresql.sh
+#/installs/postgresql/install-postgresql.sh
 
 /installs/decred/install-dcr.sh && \
 /installs/decred/install-dcrdex.sh
