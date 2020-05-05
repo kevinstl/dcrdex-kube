@@ -1,60 +1,24 @@
-#!/bin/bash
+#!/bin/sh
+# Tmux script that sets up a simnet harness.
+set -e
+#set -x # for verbose output
+SESSION="btc-harness"
+NODES_ROOT=~/dextest/btc
+RPC_USER="user"
+RPC_PASS="pass"
+ALPHA_LISTEN_PORT="20575"
+BETA_LISTEN_PORT="20576"
+ALPHA_RPC_PORT="20556"
+BETA_RPC_PORT="20557"
+ALPHA_WALLET_SEED="cMndqchcXSCUQDDZQSKU2cUHbPb5UfFL9afspxsBELeE6qx6ac9n"
+BETA_WALLET_SEED="cRHosJjgZ2UWsEAeHYYUFa8Z6viHYXm94GguGtpzMo6qwKBC1DSq"
+# Gamma is a named wallet in the alpha wallet directory.
+GAMMA_WALLET_SEED="cR6gasj1RtB9Qv9j2kVej2XzQmXPmZBcn8KzUmxSSCQoz3TqTNMg"
+GAMMA_WALLET_PASSWORD="abc"
+GAMMA_ADDRESS="2N9Lwbw6DKoNSyTB9xL4e9LXftuPP7XU214"
+ALPHA_MINING_ADDR="2MzNGEV9CBZBptm25CZ4rm2TrKF8gfVU8XA"
+BETA_MINING_ADDR="2NC2bYfZ9GX3gnDZB8CL7pYLytNKMfVxYDX"
 
-echo "init-btc-assets.sh"
-
-cd /installs/dcrdex/dex/testing/btc
-
-#sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" ./harness.sh
-
-sed -i "s/regtest=1/regtest=1\n rpcbind=dcrdex-bitcoind/" ./harness.sh
-sed -i "s/tmux/#tmux attach-session -t \$SESSION/" ./harness.sh
-
-./harness.sh &
-
-#sleeptime=0
-#while [ -z "${bitcoindIsListening}" ]
-#do
-#  echo "Waiting for bitcoind to start..."
-#  sleep ${sleeptime}
-#  bitcoindIsListening="$(lsof -i -P -n | grep 20556)"
-#  echo "bitcoindIsListening: ${bitcoindIsListening}"
-#  sleeptime=2
-#done
-#
-#cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha.conf-bak
-#
-##echo "rpcwallet=" >> /data/dextest/btc/harness-ctl/alpha.conf
-#
-##cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha-for-dcr.conf
-#
-#
-#echo "" >> /data/dextest/btc/harness-ctl/alpha.conf
-#
-#echo "[regtest]" >> /data/dextest/btc/harness-ctl/alpha.conf
-#echo "rpcport=20556" >> /data/dextest/btc/harness-ctl/alpha.conf
-
-
-
-## Tmux script that sets up a simnet harness.
-#set -e
-##set -x # for verbose output
-#SESSION="btc-harness"
-#NODES_ROOT=~/dextest/btc
-#RPC_USER="user"
-#RPC_PASS="pass"
-#ALPHA_LISTEN_PORT="20575"
-#BETA_LISTEN_PORT="20576"
-#ALPHA_RPC_PORT="20556"
-#BETA_RPC_PORT="20557"
-#ALPHA_WALLET_SEED="cMndqchcXSCUQDDZQSKU2cUHbPb5UfFL9afspxsBELeE6qx6ac9n"
-#BETA_WALLET_SEED="cRHosJjgZ2UWsEAeHYYUFa8Z6viHYXm94GguGtpzMo6qwKBC1DSq"
-## Gamma is a named wallet in the alpha wallet directory.
-#GAMMA_WALLET_SEED="cR6gasj1RtB9Qv9j2kVej2XzQmXPmZBcn8KzUmxSSCQoz3TqTNMg"
-#GAMMA_WALLET_PASSWORD="abc"
-#GAMMA_ADDRESS="2N9Lwbw6DKoNSyTB9xL4e9LXftuPP7XU214"
-#ALPHA_MINING_ADDR="2MzNGEV9CBZBptm25CZ4rm2TrKF8gfVU8XA"
-#BETA_MINING_ADDR="2NC2bYfZ9GX3gnDZB8CL7pYLytNKMfVxYDX"
-#
 #if [ -d "${NODES_ROOT}" ]; then
 #  rm -R "${NODES_ROOT}"
 #fi
@@ -109,32 +73,34 @@ sed -i "s/tmux/#tmux attach-session -t \$SESSION/" ./harness.sh
 #regtest=1
 #rpcport=${BETA_RPC_PORT}
 #EOF
-#
-#################################################################################
-## Start the alpha node.
-#################################################################################
-#
-#tmux rename-window -t $SESSION:0 'alpha'
-#tmux send-keys -t $SESSION:0 "cd ${ALPHA_DIR}" C-m
-#echo "Starting simnet alpha node"
-#tmux send-keys -t $SESSION:0 "bitcoind -rpcuser=user -rpcpassword=pass \
-#  -rpcport=${ALPHA_RPC_PORT} -datadir=${ALPHA_DIR} \
-#  -txindex=1 -regtest=1 -port=${ALPHA_LISTEN_PORT}; tmux wait-for -S alphabtc" C-m
-#sleep 3
-#
-#################################################################################
-## Setup the beta node.
-#################################################################################
-#
-#tmux new-window -t $SESSION:1 -n 'beta'
-#tmux send-keys -t $SESSION:1 "cd ${BETA_DIR}" C-m
-#
-#echo "Starting simnet beta node"
-#tmux send-keys -t $SESSION:1 "bitcoind -rpcuser=user -rpcpassword=pass \
-#  -rpcport=${BETA_RPC_PORT} -datadir=${BETA_DIR} -txindex=1 -regtest=1 \
-#  -port=${BETA_LISTEN_PORT}; tmux wait-for -S betabtc" C-m
-#sleep 3
-#
+
+################################################################################
+# Start the alpha node.
+################################################################################
+
+tmux rename-window -t $SESSION:0 'alpha'
+tmux send-keys -t $SESSION:0 "cd ${ALPHA_DIR}" C-m
+echo "Starting simnet alpha node"
+tmux send-keys -t $SESSION:0 "bitcoind -rpcuser=user -rpcpassword=pass \
+  -rpcport=${ALPHA_RPC_PORT} -datadir=${ALPHA_DIR} \
+  -rpcbind=0.0.0.0 -rpcallowip=172.18.0.0\/24 \
+  -txindex=1 -regtest=1 -port=${ALPHA_LISTEN_PORT}; tmux wait-for -S alphabtc" C-m
+sleep 3
+
+################################################################################
+# Setup the beta node.
+################################################################################
+
+tmux new-window -t $SESSION:1 -n 'beta'
+tmux send-keys -t $SESSION:1 "cd ${BETA_DIR}" C-m
+
+echo "Starting simnet beta node"
+tmux send-keys -t $SESSION:1 "bitcoind -rpcuser=user -rpcpassword=pass \
+  -rpcport=${BETA_RPC_PORT} -datadir=${BETA_DIR} -txindex=1 -regtest=1 \
+  -rpcbind=0.0.0.0 -rpcallowip=172.18.0.0\/24 \
+  -port=${BETA_LISTEN_PORT}; tmux wait-for -S betabtc" C-m
+sleep 3
+
 #################################################################################
 ## Setup the harness-ctl directory
 #################################################################################
@@ -253,5 +219,4 @@ sed -i "s/tmux/#tmux attach-session -t \$SESSION/" ./harness.sh
 #  tmux send-keys -t $SESSION:2 "./mine-alpha 1${WAIT}" C-m\; wait-for donebtc
 #done
 #
-##tmux attach-session -t $SESSION
-#
+#tmux attach-session -t $SESSION

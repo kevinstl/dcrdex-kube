@@ -43,26 +43,28 @@ sed "s/\X_REGFREEXPUB_X/${regfeexpub}/" \
 > /root/.dcrdex/dcrdex.conf
 
 
-sleeptime=0
-while [ -z "${bitcoindIsListening}" ]
-do
-  echo "Waiting for bitcoind to start..."
-  sleep ${sleeptime}
-  bitcoindIsListening="$(lsof -i -P -n | grep 20556)"
-  echo "bitcoindIsListening: ${bitcoindIsListening}"
-  sleeptime=2
-done
-
-cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha.conf-bak
-
-#echo "rpcwallet=" >> /data/dextest/btc/harness-ctl/alpha.conf
-
 cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha-for-dcr.conf
 
-
-echo "" >> /data/dextest/btc/harness-ctl/alpha.conf
-
-echo "[regtest]" >> /data/dextest/btc/harness-ctl/alpha.conf
-echo "rpcport=20556" >> /data/dextest/btc/harness-ctl/alpha.conf
+#sleeptime=0
+#while [ -z "${bitcoindIsListening}" ]
+#do
+#  echo "Waiting for bitcoind to start..."
+#  sleep ${sleeptime}
+#  bitcoindIsListening="$(lsof -i -P -n | grep 20556)"
+#  echo "bitcoindIsListening: ${bitcoindIsListening}"
+#  sleeptime=2
+#done
+#
+#cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha.conf-bak
+#
+##echo "rpcwallet=" >> /data/dextest/btc/harness-ctl/alpha.conf
+#
+#cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha-for-dcr.conf
+#
+#
+#echo "" >> /data/dextest/btc/harness-ctl/alpha.conf
+#
+#echo "[regtest]" >> /data/dextest/btc/harness-ctl/alpha.conf
+#echo "rpcport=20556" >> /data/dextest/btc/harness-ctl/alpha.conf
 
 #/usr/local/bin/bitcoin-cli --conf=/data/dextest/btc/harness-ctl/alpha.conf encryptwallet abc

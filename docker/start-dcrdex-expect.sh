@@ -43,8 +43,10 @@ if {$force_conservative} {
 
 
 set timeout -1
+#spawn ./dcrdex -d trace --configfile=/root/.dcrdex/dcrdex.conf --simnet --marketsconfpath=/root/.dcrdex/markets.json \
+#--regfeeconfirms 3 --pghost=dcrdex-postgresql:5432 --rpcaddr=0.0.0.0:5757 --webaddr=0.0.0.0:5758 --anarchy
 spawn ./dcrdex -d trace --configfile=/root/.dcrdex/dcrdex.conf --simnet --marketsconfpath=/root/.dcrdex/markets.json \
---regfeeconfirms 3 --pghost=dcrdex-postgresql:5432 --rpcaddr=0.0.0.0:5757 --webaddr=0.0.0.0:5758 --anarchy
+--regfeeconfirms 3 --pghost=dcrdex-postgresql:5432 --anarchy
 match_max 100000
 expect "*\r
 Signing key password: "

@@ -1,31 +1,22 @@
-#!/bin/bash
+#!/bin/sh
+# Tmux script that sets up a simnet harness.
+set -e
+set -x # for verbose output
+SESSION="dcr-harness"
+NODES_ROOT=~/dextest/dcr
+RPC_USER="user"
+RPC_PASS="pass"
+ALPHA_WALLET_SEED="b280922d2cffda44648346412c5ec97f429938105003730414f10b01e1402eac"
+BETA_WALLET_SEED="aabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbc"
+WALLET_PASS=123
+ALPHA_MINING_ADDR="SspUvSyDGSzvPz2NfdZ5LW15uq6rmuGZyhL"
+BETA_MINING_ADDR="SsiuwSRYvH7pqWmRxFJWR8Vmqc3AWsjmK2Y"
+ALPHA_WALLET_PORT="19567"
+BETA_WALLET_PORT="19568"
+ALPHA_RPC_PORT="19570"
+BETA_RPC_PORT="19569"
+ALPHA_PORT="19571"
 
-echo "init-dcr-assets.sh"
-
-cd /installs/dcrdex/dex/testing/dcr
-
-sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" ./harness.sh
-
-./harness.sh &
-
-## Tmux script that sets up a simnet harness.
-#set -e
-#set -x # for verbose output
-#SESSION="dcr-harness"
-#NODES_ROOT=~/dextest/dcr
-#RPC_USER="user"
-#RPC_PASS="pass"
-#ALPHA_WALLET_SEED="b280922d2cffda44648346412c5ec97f429938105003730414f10b01e1402eac"
-#BETA_WALLET_SEED="aabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbcaabbc"
-#WALLET_PASS=123
-#ALPHA_MINING_ADDR="SspUvSyDGSzvPz2NfdZ5LW15uq6rmuGZyhL"
-#BETA_MINING_ADDR="SsiuwSRYvH7pqWmRxFJWR8Vmqc3AWsjmK2Y"
-#ALPHA_WALLET_PORT="19567"
-#BETA_WALLET_PORT="19568"
-#ALPHA_RPC_PORT="19570"
-#BETA_RPC_PORT="19569"
-#ALPHA_PORT="19571"
-#
 ## WAIT can be used in a send-keys call along with a `wait-for donedcr` command to
 ## wait for process termination.
 #WAIT="; tmux wait-for -S donedcr"
@@ -70,7 +61,8 @@ sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" .
 #simnet=1
 #enablevoting=1
 #enableticketbuyer=1
-#ticketbuyer.limit=4
+#ticketbuyer.limit=5
+#ticketbuyer.balancetomaintainabsolute=1000
 #pass=${WALLET_PASS}
 #rpcconnect=127.0.0.1:${ALPHA_RPC_PORT}
 #rpclisten=127.0.0.1:${ALPHA_WALLET_PORT}
@@ -168,38 +160,38 @@ sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" .
 #tmux kill-session
 #EOF
 #chmod +x "${NODES_ROOT}/harness-ctl/quit"
-#
-#################################################################################
-## dcrd Nodes
-#################################################################################
-#
-#cd ${NODES_ROOT} && tmux new-session -d -s $SESSION
-#
-#tmux rename-window -t $SESSION:0 'alpha'
-#tmux send-keys -t $SESSION:0 "cd ${NODES_ROOT}/alpha" C-m
-#
-#echo "Starting simnet alpha node"
-#tmux send-keys -t $SESSION:0 "dcrd --appdata=${NODES_ROOT}/alpha \
-#--rpcuser=${RPC_USER} --rpcpass=${RPC_PASS} \
-#--miningaddr=${ALPHA_MINING_ADDR} --rpclisten=127.0.0.1:${ALPHA_RPC_PORT} \
-#--txindex --listen=127.0.0.1:${ALPHA_PORT} \
-#--debuglevel=debug \
-#--simnet; tmux wait-for -S alphadcr" C-m
-#
-#tmux new-window -t $SESSION:1 -n 'beta'
-#tmux send-keys -t $SESSION:1 "cd ${NODES_ROOT}/beta" C-m
-#
-#echo "Starting simnet beta node"
-#tmux send-keys -t $SESSION:1 "dcrd --appdata=${NODES_ROOT}/beta \
-#--rpcuser=${RPC_USER} --rpcpass=${RPC_PASS} \
-#--listen=127.0.0.1:19559 --rpclisten=127.0.0.1:${BETA_RPC_PORT} \
-#--miningaddr=${BETA_MINING_ADDR} \
-#--txindex --connect=127.0.0.1:${ALPHA_PORT} \
-#--debuglevel=debug \
-#--simnet; tmux wait-for -S betadcr" C-m
-#
-#sleep 3
-#
+
+################################################################################
+# dcrd Nodes
+################################################################################
+
+cd ${NODES_ROOT} && tmux new-session -d -s $SESSION
+
+tmux rename-window -t $SESSION:0 'alpha'
+tmux send-keys -t $SESSION:0 "cd ${NODES_ROOT}/alpha" C-m
+
+echo "Starting simnet alpha node"
+tmux send-keys -t $SESSION:0 "dcrd --appdata=${NODES_ROOT}/alpha \
+--rpcuser=${RPC_USER} --rpcpass=${RPC_PASS} \
+--miningaddr=${ALPHA_MINING_ADDR} --rpclisten=127.0.0.1:${ALPHA_RPC_PORT} \
+--txindex --listen=127.0.0.1:${ALPHA_PORT} \
+--debuglevel=debug \
+--simnet; tmux wait-for -S alphadcr" C-m
+
+tmux new-window -t $SESSION:1 -n 'beta'
+tmux send-keys -t $SESSION:1 "cd ${NODES_ROOT}/beta" C-m
+
+echo "Starting simnet beta node"
+tmux send-keys -t $SESSION:1 "dcrd --appdata=${NODES_ROOT}/beta \
+--rpcuser=${RPC_USER} --rpcpass=${RPC_PASS} \
+--listen=127.0.0.1:19559 --rpclisten=127.0.0.1:${BETA_RPC_PORT} \
+--miningaddr=${BETA_MINING_ADDR} \
+--txindex --connect=127.0.0.1:${ALPHA_PORT} \
+--debuglevel=debug \
+--simnet; tmux wait-for -S betadcr" C-m
+
+sleep 3
+
 #################################################################################
 ## dcrwallets
 #################################################################################
@@ -212,7 +204,10 @@ sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" .
 #tmux send-keys -t $SESSION:2 "${WALLET_PASS}" C-m "${WALLET_PASS}" C-m "n" C-m "y" C-m
 #sleep 1
 #tmux send-keys -t $SESSION:2 "${ALPHA_WALLET_SEED}" C-m C-m
-#tmux send-keys -t $SESSION:2 "dcrwallet -C w-alpha.conf " C-m
+## unlock the wallet on start-up to buy tickets and vote on blocks
+#tmux send-keys -t $SESSION:2 "dcrwallet -C w-alpha.conf --promptpass" C-m
+#sleep 1
+#tmux send-keys -t $SESSION:2 "${WALLET_PASS}" C-m
 #
 #tmux new-window -t $SESSION:3 -n 'w-beta'
 #tmux send-keys -t $SESSION:3 "cd ${NODES_ROOT}/beta" C-m
@@ -243,11 +238,11 @@ sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" .
 #
 #sleep 5
 #
-## Have beta send some credits to alpha
+## Have alpha send some credits to beta
 #for i in 10 18 5 7 1 15 3 25
 #do
 #  tmux send-keys -t $SESSION:4 "./alpha sendtoaddress ${BETA_MINING_ADDR} ${i}${WAIT}" C-m\; wait-for donedcr
 #  tmux send-keys -t $SESSION:4 "./mine-alpha 1${WAIT}" C-m\; wait-for donedcr
 #done
 #
-##tmux attach-session -t $SESSION
+#tmux attach-session -t $SESSION

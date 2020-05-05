@@ -1,115 +1,81 @@
-#!/bin/bash
+#!/bin/sh
+# Tmux script that sets up a simnet harness.
+set -e
+#set -x # for verbose output
+SESSION="btc-harness"
+NODES_ROOT=~/dextest/btc
+RPC_USER="user"
+RPC_PASS="pass"
+ALPHA_LISTEN_PORT="20575"
+BETA_LISTEN_PORT="20576"
+ALPHA_RPC_PORT="20556"
+BETA_RPC_PORT="20557"
+ALPHA_WALLET_SEED="cMndqchcXSCUQDDZQSKU2cUHbPb5UfFL9afspxsBELeE6qx6ac9n"
+BETA_WALLET_SEED="cRHosJjgZ2UWsEAeHYYUFa8Z6viHYXm94GguGtpzMo6qwKBC1DSq"
+# Gamma is a named wallet in the alpha wallet directory.
+GAMMA_WALLET_SEED="cR6gasj1RtB9Qv9j2kVej2XzQmXPmZBcn8KzUmxSSCQoz3TqTNMg"
+GAMMA_WALLET_PASSWORD="abc"
+GAMMA_ADDRESS="2N9Lwbw6DKoNSyTB9xL4e9LXftuPP7XU214"
+ALPHA_MINING_ADDR="2MzNGEV9CBZBptm25CZ4rm2TrKF8gfVU8XA"
+BETA_MINING_ADDR="2NC2bYfZ9GX3gnDZB8CL7pYLytNKMfVxYDX"
 
-echo "init-btc-assets.sh"
+if [ -d "${NODES_ROOT}" ]; then
+  rm -R "${NODES_ROOT}"
+fi
 
-cd /installs/dcrdex/dex/testing/btc
+ALPHA_DIR="${NODES_ROOT}/alpha"
+BETA_DIR="${NODES_ROOT}/beta"
+HARNESS_DIR="${NODES_ROOT}/harness-ctl"
 
-#sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" ./harness.sh
+echo "Writing node config files"
+mkdir -p "${ALPHA_DIR}"
+mkdir -p "${BETA_DIR}"
+mkdir -p "${HARNESS_DIR}"
 
-sed -i "s/regtest=1/regtest=1\n rpcbind=dcrdex-bitcoind/" ./harness.sh
-sed -i "s/tmux/#tmux attach-session -t \$SESSION/" ./harness.sh
+# Get the absolute path.
+NODES_ROOT=$(cd ~/dextest/btc; pwd)
 
-./harness.sh &
+ALPHA_CLI_CFG="-rpcwallet= -rpcport=${ALPHA_RPC_PORT} -regtest=1 -rpcuser=user -rpcpassword=pass"
 
-#sleeptime=0
-#while [ -z "${bitcoindIsListening}" ]
-#do
-#  echo "Waiting for bitcoind to start..."
-#  sleep ${sleeptime}
-#  bitcoindIsListening="$(lsof -i -P -n | grep 20556)"
-#  echo "bitcoindIsListening: ${bitcoindIsListening}"
-#  sleeptime=2
-#done
-#
-#cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha.conf-bak
-#
-##echo "rpcwallet=" >> /data/dextest/btc/harness-ctl/alpha.conf
-#
-##cp /data/dextest/btc/harness-ctl/alpha.conf /data/dextest/btc/harness-ctl/alpha-for-dcr.conf
-#
-#
-#echo "" >> /data/dextest/btc/harness-ctl/alpha.conf
-#
-#echo "[regtest]" >> /data/dextest/btc/harness-ctl/alpha.conf
-#echo "rpcport=20556" >> /data/dextest/btc/harness-ctl/alpha.conf
+BETA_CLI_CFG="-rpcwallet= -rpcport=${BETA_RPC_PORT} -regtest=1 -rpcuser=user -rpcpassword=pass"
 
+GAMMA_CLI_CFG="-rpcwallet=gamma -rpcport=${ALPHA_RPC_PORT} -regtest=1 -rpcuser=user -rpcpassword=pass"
 
+# WAIT can be used in a send-keys call along with a `wait-for donebtc` command to
+# wait for process termination.
+WAIT="; tmux wait-for -S donebtc"
 
-## Tmux script that sets up a simnet harness.
-#set -e
-##set -x # for verbose output
-#SESSION="btc-harness"
-#NODES_ROOT=~/dextest/btc
-#RPC_USER="user"
-#RPC_PASS="pass"
-#ALPHA_LISTEN_PORT="20575"
-#BETA_LISTEN_PORT="20576"
-#ALPHA_RPC_PORT="20556"
-#BETA_RPC_PORT="20557"
-#ALPHA_WALLET_SEED="cMndqchcXSCUQDDZQSKU2cUHbPb5UfFL9afspxsBELeE6qx6ac9n"
-#BETA_WALLET_SEED="cRHosJjgZ2UWsEAeHYYUFa8Z6viHYXm94GguGtpzMo6qwKBC1DSq"
-## Gamma is a named wallet in the alpha wallet directory.
-#GAMMA_WALLET_SEED="cR6gasj1RtB9Qv9j2kVej2XzQmXPmZBcn8KzUmxSSCQoz3TqTNMg"
-#GAMMA_WALLET_PASSWORD="abc"
-#GAMMA_ADDRESS="2N9Lwbw6DKoNSyTB9xL4e9LXftuPP7XU214"
-#ALPHA_MINING_ADDR="2MzNGEV9CBZBptm25CZ4rm2TrKF8gfVU8XA"
-#BETA_MINING_ADDR="2NC2bYfZ9GX3gnDZB8CL7pYLytNKMfVxYDX"
-#
-#if [ -d "${NODES_ROOT}" ]; then
-#  rm -R "${NODES_ROOT}"
-#fi
-#
-#ALPHA_DIR="${NODES_ROOT}/alpha"
-#BETA_DIR="${NODES_ROOT}/beta"
-#HARNESS_DIR="${NODES_ROOT}/harness-ctl"
-#
-#echo "Writing node config files"
-#mkdir -p "${ALPHA_DIR}"
-#mkdir -p "${BETA_DIR}"
-#mkdir -p "${HARNESS_DIR}"
-#
-## Get the absolute path.
-#NODES_ROOT=$(cd ~/dextest/btc; pwd)
-#
-#ALPHA_CLI_CFG="-rpcwallet= -rpcport=${ALPHA_RPC_PORT} -regtest=1 -rpcuser=user -rpcpassword=pass"
-#
-#BETA_CLI_CFG="-rpcwallet= -rpcport=${BETA_RPC_PORT} -regtest=1 -rpcuser=user -rpcpassword=pass"
-#
-#GAMMA_CLI_CFG="-rpcwallet=gamma -rpcport=${ALPHA_RPC_PORT} -regtest=1 -rpcuser=user -rpcpassword=pass"
-#
-## WAIT can be used in a send-keys call along with a `wait-for donebtc` command to
-## wait for process termination.
-#WAIT="; tmux wait-for -S donebtc"
-#
-#cd ${NODES_ROOT} && tmux new-session -d -s $SESSION
-#
-#################################################################################
-## Write config files.
-#################################################################################
-#
-## These config files aren't actually used here, but can be used by other
-## programs. I would use them here, but bitcoind seems to have some issues
-## reading from the file when using regtest.
-#
-#cat > "${HARNESS_DIR}/alpha.conf" <<EOF
-#rpcuser=user
-#rpcpassword=pass
-#datadir=${ALPHA_DIR}
-#txindex=1
-#port=${ALPHA_LISTEN_PORT}
-#regtest=1
-#rpcport=${ALPHA_RPC_PORT}
-#EOF
-#
-#cat > "${HARNESS_DIR}/beta.conf" <<EOF
-#rpcuser=user
-#rpcpassword=pass
-#datadir=${BETA_DIR}
-#txindex=1
-#regtest=1
-#rpcport=${BETA_RPC_PORT}
-#EOF
-#
+cd ${NODES_ROOT} && tmux new-session -d -s $SESSION
+
+################################################################################
+# Write config files.
+################################################################################
+
+# These config files aren't actually used here, but can be used by other
+# programs. I would use them here, but bitcoind seems to have some issues
+# reading from the file when using regtest.
+
+cat > "${HARNESS_DIR}/alpha.conf" <<EOF
+rpcuser=user
+rpcpassword=pass
+datadir=${ALPHA_DIR}
+txindex=1
+port=${ALPHA_LISTEN_PORT}
+regtest=1
+rpcbind=dcrdex-bitcoind
+rpcport=${ALPHA_RPC_PORT}
+EOF
+
+cat > "${HARNESS_DIR}/beta.conf" <<EOF
+rpcuser=user
+rpcpassword=pass
+datadir=${BETA_DIR}
+txindex=1
+regtest=1
+rpcbind=dcrdex-bitcoind
+rpcport=${BETA_RPC_PORT}
+EOF
+
 #################################################################################
 ## Start the alpha node.
 #################################################################################
@@ -253,5 +219,4 @@ sed -i "s/tmux/#tmux attach-session -t \$SESSION/" ./harness.sh
 #  tmux send-keys -t $SESSION:2 "./mine-alpha 1${WAIT}" C-m\; wait-for donebtc
 #done
 #
-##tmux attach-session -t $SESSION
-#
+#tmux attach-session -t $SESSION

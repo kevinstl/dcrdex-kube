@@ -2,26 +2,25 @@
 
 echo "start-all.sh"
 
-#start-bitcoind.sh &
-#
 #/installs/go/install-go.sh
 #
-#/installs/postgresql/install-postgresql.sh
-#
 #/installs/decred/install-dcr.sh && \
-#/installs/decred/install-dcrdex.sh && \
-#/installs/decred/start-dcr.sh && \
-#/installs/decred/init-for-dcrdex.sh && \
-#/installs/decred/start-dcrdex.sh && \
-#/installs/decred/start-dex-client.sh
+#/installs/decred/install-dcrdex.sh
+#
+#/installs/decred/init-dcr-assets.sh
+#/installs/decred/init-btc-assets.sh
+#
+#/installs/decred/init-dcrdex-conf.sh
 
 
+#if [ ! -f /data/dextest/btc/harness-ctl/alpha-for-dcr.conf ]; then
+#  /installs/decred/harness-dcr-init.sh
+#  /installs/decred/harness-btc-for-dcr-init.sh
+#  /installs/decred/init-dcrdex-conf.sh
+#fi
 
 
-#using test harness
-/installs/go/install-go.sh
-
-#/installs/postgresql/install-postgresql.sh
+#/installs/decred/harness-dcr-start.sh
 
 /installs/decred/install-dcr.sh && \
 /installs/decred/install-dcrdex.sh
@@ -35,10 +34,3 @@ echo "start-all.sh"
 /installs/decred/start-dex-client.sh
 
 /installs/decred/wait.sh
-
-
-
-#/installs/go/install-go.sh
-#/installs/decred/install-dcrdex.sh
-#/installs/decred/init-btc-assets.sh
-#/installs/decred/wait.sh

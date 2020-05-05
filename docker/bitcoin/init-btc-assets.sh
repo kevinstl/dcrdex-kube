@@ -4,10 +4,13 @@ echo "init-btc-assets.sh"
 
 cd /installs/dcrdex/dex/testing/btc
 
-#sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" ./harness.sh
+#sed -i "s/-regtest=1/-regtest=1 -rpcallowip=172.18.0.0\/24/" ./harness.sh
 
-sed -i "s/regtest=1/regtest=1\n rpcbind=dcrdex-bitcoind/" ./harness.sh
-sed -i "s/tmux/#tmux attach-session -t \$SESSION/" ./harness.sh
+sed -i "s/bitcoind -rpcuser=user/bitcoind -rpcuser=user -rpcbind=0.0.0.0 -rpcallowip=172.18.0.0\/24/" ./harness.sh
+
+sed -i "s/tmux attach-session -t \$SESSION/#tmux attach-session -t \$SESSION/" ./harness.sh
+
+#sed -i "s/tmux/#tmux attach-session -t \$SESSION]/" ./harness.sh
 
 ./harness.sh &
 
