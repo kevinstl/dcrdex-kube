@@ -1,4 +1,7 @@
 #!/bin/sh
+
+echo "harness-btc-start.sh"
+
 # Tmux script that sets up a simnet harness.
 set -e
 #set -x # for verbose output
@@ -44,9 +47,10 @@ BETA_MINING_ADDR="2NC2bYfZ9GX3gnDZB8CL7pYLytNKMfVxYDX"
 ## WAIT can be used in a send-keys call along with a `wait-for donebtc` command to
 ## wait for process termination.
 #WAIT="; tmux wait-for -S donebtc"
-#
+
 #cd ${NODES_ROOT} && tmux new-session -d -s $SESSION
-#
+cd ${NODES_ROOT} && tmux attach -d -s $SESSION
+
 #################################################################################
 ## Write config files.
 #################################################################################

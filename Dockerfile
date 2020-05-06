@@ -35,6 +35,9 @@ ADD docker/dcrdex-template.conf /installs/decred/
 
 ADD docker/create-wallet-expect.sh /installs/decred/
 ADD docker/init-for-dcrdex.sh /installs/decred/
+
+ADD docker/init-dcrd-conf.sh /installs/decred/
+ADD docker/init-btc-conf.sh /installs/decred/
 ADD docker/init-dcrdex-conf.sh /installs/decred/
 
 ADD docker/clone-dcrdex.sh /installs/decred/
@@ -55,6 +58,7 @@ ADD docker/start-dex-client.sh /installs/decred/
 ADD docker/init-btc-assets.sh /installs/decred/
 ADD docker/init-dcr-assets.sh /installs/decred/
 
+ADD docker/harness.sh /installs/decred/
 ADD docker/harness-btc-for-dcr-init.sh /installs/decred/
 ADD docker/harness-dcr-init.sh /installs/decred/
 ADD docker/harness-dcr-start.sh /installs/decred/

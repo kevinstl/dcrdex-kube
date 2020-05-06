@@ -25,6 +25,7 @@ ADD bitcoin/bitcoin.conf /data/.bitcoin/
 ADD clone-dcrdex.sh /installs/decred/
 ADD bitcoin/init-btc-assets.sh /installs/decred/
 
+ADD bitcoin/harness.sh /installs/decred/
 ADD bitcoin/harness-btc-init.sh /installs/decred/
 ADD bitcoin/harness-btc-start.sh /installs/decred/
 

@@ -25,8 +25,10 @@ echo "start-all.sh"
 /installs/decred/install-dcr.sh && \
 /installs/decred/install-dcrdex.sh
 
-/installs/decred/init-dcr-assets.sh
-/installs/decred/init-btc-assets.sh
+#/installs/decred/init-dcr-assets.sh
+#/installs/decred/init-btc-assets.sh
+/installs/decred/harness-btc-for-dcr-init.sh
+/installs/decred/harness.sh
 
 /installs/decred/init-dcrdex-conf.sh
 

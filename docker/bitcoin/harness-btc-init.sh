@@ -1,4 +1,7 @@
 #!/bin/sh
+
+echo "harness-btc-init.sh"
+
 # Tmux script that sets up a simnet harness.
 set -e
 #set -x # for verbose output
