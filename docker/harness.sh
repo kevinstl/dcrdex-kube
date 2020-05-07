@@ -20,15 +20,6 @@ ALPHA_RPC_PORT="19570"
 BETA_RPC_PORT="19569"
 ALPHA_PORT="19571"
 
-echo "debug1 DCR_INITIALIZED: ${DCR_INITIALIZED}"
-
-DCR_INITIALIZED="false"
-if [ -f /data/dextest/dcr/harness-ctl/alpha-ctl.conf ]; then
-  DCR_INITIALIZED="true"
-fi
-
-echo "debug2 DCR_INITIALIZED: ${DCR_INITIALIZED}"
-
 # WAIT can be used in a send-keys call along with a `wait-for donedcr` command to
 # wait for process termination.
 WAIT="; tmux wait-for -S donedcr"
@@ -37,148 +28,144 @@ if [ -d "${NODES_ROOT}" ]; then
   rm -R "${NODES_ROOT}"
 fi
 
-if [ "${DCR_INITIALIZED}" = "false" ]; then
+echo "Writing node config files"
+mkdir -p "${NODES_ROOT}/alpha"
+mkdir -p "${NODES_ROOT}/beta"
+mkdir -p "${NODES_ROOT}/harness-ctl"
 
-  echo "Writing node config files"
-  mkdir -p "${NODES_ROOT}/alpha"
-  mkdir -p "${NODES_ROOT}/beta"
-  mkdir -p "${NODES_ROOT}/harness-ctl"
+################################################################################
+# Configuration Files
+################################################################################
 
-  ################################################################################
-  # Configuration Files
-  ################################################################################
-
-  # Alpha ctl config
-  cat > "${NODES_ROOT}/alpha/alpha-ctl.conf" <<EOF
-  rpcuser=${RPC_USER}
-  rpcpass=${RPC_PASS}
-  rpccert=${NODES_ROOT}/alpha/rpc.cert
-  rpcserver=127.0.0.1:${ALPHA_WALLET_PORT}
+# Alpha ctl config
+cat > "${NODES_ROOT}/alpha/alpha-ctl.conf" <<EOF
+rpcuser=${RPC_USER}
+rpcpass=${RPC_PASS}
+rpccert=${NODES_ROOT}/alpha/rpc.cert
+rpcserver=127.0.0.1:${ALPHA_WALLET_PORT}
 EOF
 
-  # Beta ctl config
-  cat > "${NODES_ROOT}/beta/beta-ctl.conf" <<EOF
-  rpcuser=${RPC_USER}
-  rpcpass=${RPC_PASS}
-  rpccert=${NODES_ROOT}/beta/rpc.cert
-  rpcserver=127.0.0.1:${BETA_WALLET_PORT}
+# Beta ctl config
+cat > "${NODES_ROOT}/beta/beta-ctl.conf" <<EOF
+rpcuser=${RPC_USER}
+rpcpass=${RPC_PASS}
+rpccert=${NODES_ROOT}/beta/rpc.cert
+rpcserver=127.0.0.1:${BETA_WALLET_PORT}
 EOF
 
-  # Alpha wallet config
-  cat > "${NODES_ROOT}/alpha/w-alpha.conf" <<EOF
-  username=${RPC_USER}
-  password=${RPC_PASS}
-  cafile=${NODES_ROOT}/alpha/rpc.cert
-  rpccert=${NODES_ROOT}/alpha/rpc.cert
-  logdir=${NODES_ROOT}/alpha/log
-  appdata=${NODES_ROOT}/alpha
-  simnet=1
-  enablevoting=1
-  enableticketbuyer=1
-  ticketbuyer.limit=5
-  ticketbuyer.balancetomaintainabsolute=1000
-  pass=${WALLET_PASS}
-  rpcconnect=127.0.0.1:${ALPHA_RPC_PORT}
-  rpclisten=127.0.0.1:${ALPHA_WALLET_PORT}
-  nogrpc=1
+# Alpha wallet config
+cat > "${NODES_ROOT}/alpha/w-alpha.conf" <<EOF
+username=${RPC_USER}
+password=${RPC_PASS}
+cafile=${NODES_ROOT}/alpha/rpc.cert
+rpccert=${NODES_ROOT}/alpha/rpc.cert
+logdir=${NODES_ROOT}/alpha/log
+appdata=${NODES_ROOT}/alpha
+simnet=1
+enablevoting=1
+enableticketbuyer=1
+ticketbuyer.limit=5
+ticketbuyer.balancetomaintainabsolute=1000
+pass=${WALLET_PASS}
+rpcconnect=127.0.0.1:${ALPHA_RPC_PORT}
+rpclisten=127.0.0.1:${ALPHA_WALLET_PORT}
+nogrpc=1
 EOF
 
-  # Beta wallet config
-  cat > "${NODES_ROOT}/beta/w-beta.conf" <<EOF
-  username=${RPC_USER}
-  password=${RPC_PASS}
-  cafile=${NODES_ROOT}/beta/rpc.cert
-  rpccert=${NODES_ROOT}/beta/rpc.cert
-  logdir=${NODES_ROOT}/beta/log
-  appdata=${NODES_ROOT}/beta
-  simnet=1
-  pass=${WALLET_PASS}
-  rpcconnect=127.0.0.1:${BETA_RPC_PORT}
-  rpclisten=127.0.0.1:${BETA_WALLET_PORT}
-  nogrpc=1
+# Beta wallet config
+cat > "${NODES_ROOT}/beta/w-beta.conf" <<EOF
+username=${RPC_USER}
+password=${RPC_PASS}
+cafile=${NODES_ROOT}/beta/rpc.cert
+rpccert=${NODES_ROOT}/beta/rpc.cert
+logdir=${NODES_ROOT}/beta/log
+appdata=${NODES_ROOT}/beta
+simnet=1
+pass=${WALLET_PASS}
+rpcconnect=127.0.0.1:${BETA_RPC_PORT}
+rpclisten=127.0.0.1:${BETA_WALLET_PORT}
+nogrpc=1
 EOF
 
-  ################################################################################
-  # Control Scripts
-  ################################################################################
+################################################################################
+# Control Scripts
+################################################################################
 
-  # Beta ctl
-  cat > "${NODES_ROOT}/harness-ctl/alpha" <<EOF
-  #!/bin/sh
-  dcrctl -C ${NODES_ROOT}/alpha/alpha-ctl.conf --wallet \$*
+# Beta ctl
+cat > "${NODES_ROOT}/harness-ctl/alpha" <<EOF
+#!/bin/sh
+dcrctl -C ${NODES_ROOT}/alpha/alpha-ctl.conf --wallet \$*
 EOF
-  chmod +x "${NODES_ROOT}/harness-ctl/alpha"
+chmod +x "${NODES_ROOT}/harness-ctl/alpha"
 
-  # Alpha ctl
-  cat > "${NODES_ROOT}/harness-ctl/beta" <<EOF
-  #!/bin/sh
-  dcrctl -C ${NODES_ROOT}/beta/beta-ctl.conf --wallet \$*
+# Alpha ctl
+cat > "${NODES_ROOT}/harness-ctl/beta" <<EOF
+#!/bin/sh
+dcrctl -C ${NODES_ROOT}/beta/beta-ctl.conf --wallet \$*
 EOF
-  chmod +x "${NODES_ROOT}/harness-ctl/beta"
+chmod +x "${NODES_ROOT}/harness-ctl/beta"
 
-  # Alpha mine script
-  cat > "${NODES_ROOT}/harness-ctl/mine-alpha" <<EOF
-  #!/bin/sh
-    case \$1 in
-        ''|*[!0-9]*)  ;;
-        *) NUM=\$1 ;;
-    esac
-    for i in \$(seq \$NUM) ; do
-      dcrctl -C ${NODES_ROOT}/alpha/alpha-ctl.conf generate 1
-      sleep 0.5
-    done
+# Alpha mine script
+cat > "${NODES_ROOT}/harness-ctl/mine-alpha" <<EOF
+#!/bin/sh
+  case \$1 in
+      ''|*[!0-9]*)  ;;
+      *) NUM=\$1 ;;
+  esac
+  for i in \$(seq \$NUM) ; do
+    dcrctl -C ${NODES_ROOT}/alpha/alpha-ctl.conf generate 1
+    sleep 0.5
+  done
 EOF
-  chmod +x "${NODES_ROOT}/harness-ctl/mine-alpha"
+chmod +x "${NODES_ROOT}/harness-ctl/mine-alpha"
 
-  # Beta mine script
-  cat > "${NODES_ROOT}/harness-ctl/mine-beta" <<EOF
-  #!/bin/sh
-  NUM=1
-    case \$1 in
-        ''|*[!0-9]*)  ;;
-        *) NUM=\$1 ;;
-    esac
-    for i in \$(seq \$NUM) ; do
-      dcrctl -C ${NODES_ROOT}/beta/beta-ctl.conf generate 1
-      sleep 0.5
-    done
+# Beta mine script
+cat > "${NODES_ROOT}/harness-ctl/mine-beta" <<EOF
+#!/bin/sh
+NUM=1
+  case \$1 in
+      ''|*[!0-9]*)  ;;
+      *) NUM=\$1 ;;
+  esac
+  for i in \$(seq \$NUM) ; do
+    dcrctl -C ${NODES_ROOT}/beta/beta-ctl.conf generate 1
+    sleep 0.5
+  done
 EOF
-  chmod +x "${NODES_ROOT}/harness-ctl/mine-beta"
+chmod +x "${NODES_ROOT}/harness-ctl/mine-beta"
 
-  # Reorg script
-  cat > "${NODES_ROOT}/harness-ctl/reorg" <<EOF
-  #!/bin/sh
-  echo "Disconnecting beta from alpha"
-  sleep 1
-  ./beta addnode 127.0.0.1:${ALPHA_PORT} remove
-  echo "Mining a block on alpha"
-  sleep 1
-  ./mine-alpha 1
-  echo "Mining 3 blocks on beta"
-  ./mine-beta 3
-  sleep 2
-  echo "Reconnecting beta to alpha"
-  ./beta addnode 127.0.0.1:${ALPHA_PORT} add
-  sleep 2
-  grep REORG ${NODES_ROOT}/alpha/logs/simnet/dcrd.log
+# Reorg script
+cat > "${NODES_ROOT}/harness-ctl/reorg" <<EOF
+#!/bin/sh
+echo "Disconnecting beta from alpha"
+sleep 1
+./beta addnode 127.0.0.1:${ALPHA_PORT} remove
+echo "Mining a block on alpha"
+sleep 1
+./mine-alpha 1
+echo "Mining 3 blocks on beta"
+./mine-beta 3
+sleep 2
+echo "Reconnecting beta to alpha"
+./beta addnode 127.0.0.1:${ALPHA_PORT} add
+sleep 2
+grep REORG ${NODES_ROOT}/alpha/logs/simnet/dcrd.log
 EOF
-  chmod +x "${NODES_ROOT}/harness-ctl/reorg"
+chmod +x "${NODES_ROOT}/harness-ctl/reorg"
 
-  # Shutdown script
-  cat > "${NODES_ROOT}/harness-ctl/quit" <<EOF
-  #!/bin/sh
-  tmux send-keys -t $SESSION:0 C-c
-  tmux send-keys -t $SESSION:1 C-c
-  tmux wait-for alphadcr
-  tmux wait-for betadcr
-  tmux kill-session
+# Shutdown script
+cat > "${NODES_ROOT}/harness-ctl/quit" <<EOF
+#!/bin/sh
+tmux send-keys -t $SESSION:0 C-c
+tmux send-keys -t $SESSION:1 C-c
+tmux wait-for alphadcr
+tmux wait-for betadcr
+tmux kill-session
 EOF
-  chmod +x "${NODES_ROOT}/harness-ctl/quit"
+chmod +x "${NODES_ROOT}/harness-ctl/quit"
 
-  /installs/decred/init-dcrd-conf.sh
-  /installs/decred/init-btc-conf.sh
-
-fi
+/installs/decred/init-dcrd-conf.sh
+/installs/decred/init-btc-conf.sh
 
 ################################################################################
 # dcrd Nodes
@@ -211,61 +198,57 @@ tmux send-keys -t $SESSION:1 "dcrd --appdata=${NODES_ROOT}/beta \
 
 sleep 3
 
-if [ "${DCR_INITIALIZED}" = "false" ]; then
+################################################################################
+# dcrwallets
+################################################################################
 
-  ################################################################################
-  # dcrwallets
-  ################################################################################
+tmux new-window -t $SESSION:2 -n 'w-alpha'
+tmux send-keys -t $SESSION:2 "cd ${NODES_ROOT}/alpha" C-m
+tmux send-keys -t $SESSION:2 "dcrwallet -C w-alpha.conf --create" C-m
+echo "Creating simnet alpha wallet"
+sleep 1
+tmux send-keys -t $SESSION:2 "${WALLET_PASS}" C-m "${WALLET_PASS}" C-m "n" C-m "y" C-m
+sleep 1
+tmux send-keys -t $SESSION:2 "${ALPHA_WALLET_SEED}" C-m C-m
+# unlock the wallet on start-up to buy tickets and vote on blocks
+tmux send-keys -t $SESSION:2 "dcrwallet -C w-alpha.conf --promptpass" C-m
+sleep 1
+tmux send-keys -t $SESSION:2 "${WALLET_PASS}" C-m
 
-  tmux new-window -t $SESSION:2 -n 'w-alpha'
-  tmux send-keys -t $SESSION:2 "cd ${NODES_ROOT}/alpha" C-m
-  tmux send-keys -t $SESSION:2 "dcrwallet -C w-alpha.conf --create" C-m
-  echo "Creating simnet alpha wallet"
-  sleep 1
-  tmux send-keys -t $SESSION:2 "${WALLET_PASS}" C-m "${WALLET_PASS}" C-m "n" C-m "y" C-m
-  sleep 1
-  tmux send-keys -t $SESSION:2 "${ALPHA_WALLET_SEED}" C-m C-m
-  # unlock the wallet on start-up to buy tickets and vote on blocks
-  tmux send-keys -t $SESSION:2 "dcrwallet -C w-alpha.conf --promptpass" C-m
-  sleep 1
-  tmux send-keys -t $SESSION:2 "${WALLET_PASS}" C-m
+tmux new-window -t $SESSION:3 -n 'w-beta'
+tmux send-keys -t $SESSION:3 "cd ${NODES_ROOT}/beta" C-m
+tmux send-keys -t $SESSION:3 "dcrwallet -C w-beta.conf --create" C-m
+echo "Creating simnet beta wallet"
+sleep 1
+tmux send-keys -t $SESSION:3 "${WALLET_PASS}" C-m "${WALLET_PASS}" C-m "n" C-m "y" C-m
+sleep 1
+tmux send-keys -t $SESSION:3 "${BETA_WALLET_SEED}" C-m C-m
+tmux send-keys -t $SESSION:3 "dcrwallet -C w-beta.conf --debuglevel=debug" C-m
 
-  tmux new-window -t $SESSION:3 -n 'w-beta'
-  tmux send-keys -t $SESSION:3 "cd ${NODES_ROOT}/beta" C-m
-  tmux send-keys -t $SESSION:3 "dcrwallet -C w-beta.conf --create" C-m
-  echo "Creating simnet beta wallet"
-  sleep 1
-  tmux send-keys -t $SESSION:3 "${WALLET_PASS}" C-m "${WALLET_PASS}" C-m "n" C-m "y" C-m
-  sleep 1
-  tmux send-keys -t $SESSION:3 "${BETA_WALLET_SEED}" C-m C-m
-  tmux send-keys -t $SESSION:3 "dcrwallet -C w-beta.conf --debuglevel=debug" C-m
+sleep 30
 
-  sleep 30
+################################################################################
+# Prepare the wallets
+################################################################################
 
-  ################################################################################
-  # Prepare the wallets
-  ################################################################################
+tmux new-window -t $SESSION:4 -n 'harness-ctl'
+tmux send-keys -t $SESSION:4 "cd ${NODES_ROOT}/harness-ctl" C-m
 
-  tmux new-window -t $SESSION:4 -n 'harness-ctl'
-  tmux send-keys -t $SESSION:4 "cd ${NODES_ROOT}/harness-ctl" C-m
+tmux send-keys -t $SESSION:4 "./alpha getnewaddress${WAIT}" C-m\; wait-for donedcr
+tmux send-keys -t $SESSION:4 "./alpha getnewaddress${WAIT}" C-m\; wait-for donedcr
+tmux send-keys -t $SESSION:4 "./beta getnewaddress${WAIT}" C-m\; wait-for donedcr
+tmux send-keys -t $SESSION:4 "./beta getnewaddress${WAIT}" C-m\; wait-for donedcr
 
-  tmux send-keys -t $SESSION:4 "./alpha getnewaddress${WAIT}" C-m\; wait-for donedcr
-  tmux send-keys -t $SESSION:4 "./alpha getnewaddress${WAIT}" C-m\; wait-for donedcr
-  tmux send-keys -t $SESSION:4 "./beta getnewaddress${WAIT}" C-m\; wait-for donedcr
-  tmux send-keys -t $SESSION:4 "./beta getnewaddress${WAIT}" C-m\; wait-for donedcr
+echo "Mining 160 blocks on alpha"
+tmux send-keys -t $SESSION:4 "./mine-alpha 160${WAIT}" C-m\; wait-for donedcr
 
-  echo "Mining 160 blocks on alpha"
-  tmux send-keys -t $SESSION:4 "./mine-alpha 160${WAIT}" C-m\; wait-for donedcr
+sleep 5
 
-  sleep 5
-
-  # Have alpha send some credits to beta
-  for i in 10 18 5 7 1 15 3 25
-  do
-    tmux send-keys -t $SESSION:4 "./alpha sendtoaddress ${BETA_MINING_ADDR} ${i}${WAIT}" C-m\; wait-for donedcr
-    tmux send-keys -t $SESSION:4 "./mine-alpha 1${WAIT}" C-m\; wait-for donedcr
-  done
-
-fi
+# Have alpha send some credits to beta
+for i in 10 18 5 7 1 15 3 25
+do
+  tmux send-keys -t $SESSION:4 "./alpha sendtoaddress ${BETA_MINING_ADDR} ${i}${WAIT}" C-m\; wait-for donedcr
+  tmux send-keys -t $SESSION:4 "./mine-alpha 1${WAIT}" C-m\; wait-for donedcr
+done
 
 #tmux attach-session -t $SESSION

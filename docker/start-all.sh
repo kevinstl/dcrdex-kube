@@ -35,4 +35,14 @@ echo "start-all.sh"
 /installs/decred/start-dcrdex.sh && \
 /installs/decred/start-dex-client.sh
 
+#cd /data/dextest/dcr/harness-ctl
+#
+#while :
+#do
+#  ./mine-alpha 1
+#  sleep 5
+#done
+
+#watch -n 5 ./mine-alpha 1
+
 /installs/decred/wait.sh
