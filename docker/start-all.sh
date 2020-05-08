@@ -35,6 +35,13 @@ echo "start-all.sh"
 /installs/decred/start-dcrdex.sh && \
 /installs/decred/start-dex-client.sh
 
+#cp -r /root/ /Users/kevin/dcrdex
+#cp -r /data/dextest/ /Users/kevin/dcrdex
+
+mkdir -p /Users/kevin/dcrdex
+
+cp /data/dextest/dcr/alpha/rpc.cert /Users/kevin/dcrdex/dextest/dcr/alpha/rpc.cert
+
 #cd /data/dextest/dcr/harness-ctl
 #
 #while :

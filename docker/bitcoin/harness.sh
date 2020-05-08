@@ -82,6 +82,8 @@ EOF
 ################################################################################
 # Start the alpha node.
 ################################################################################
+#  -rpcbind=0.0.0.0 -rpcallowip=0.0.0.0/0 \
+#  -rpcbind=0.0.0.0 -rpcallowip=172.16.0.0/12 \
 
 tmux rename-window -t $SESSION:0 'alpha'
 tmux send-keys -t $SESSION:0 "cd ${ALPHA_DIR}" C-m
